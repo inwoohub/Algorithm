@@ -36,7 +36,7 @@ public class Main{
             dist[A][B] = C;
             dist[B][A] = C;
         }
-        
+
         int result = 0;
 
         // dijkstra로 최단거리 탐색
@@ -50,7 +50,6 @@ public class Main{
             }
             result = Math.max(result, sum);
         }
-        
         System.out.print(result);
         
     }
@@ -64,7 +63,7 @@ public class Main{
         bestDist[i] = 0;
         PriorityQueue<int[]> q = new PriorityQueue<>((a,b) -> a[1]-b[1]);
         q.offer(new int[]{i,0});
-
+        
         while(!q.isEmpty()){
             int[] cur = q.poll();
             int curNode = cur[0];
@@ -72,7 +71,7 @@ public class Main{
             if(bestDist[curNode] < curDist) continue; //늦게 들어온게 더 멀면 패스
             for(int nextNode : list[curNode]){
                 int nextDist = curDist + dist[curNode][nextNode];
-                if( nextDist <= bestDist[curNode] ){
+                if( nextDist <= bestDist[nextNode] ){
                     bestDist[nextNode] = nextDist;
                     q.offer(new int[]{nextNode, nextDist});
                 }
