@@ -1,10 +1,9 @@
-// [1][1] 부터 시작
-// dfs 로 탐색하면서 방문 처리 (dfs 함수 만들어서 방문 처리)
-// 만약 탐색하다가 다음 노드가 '시작' == '끝' 즉, 사이클 이라면 +1
-//    어떻게? 시작점 == 종착지 인 경우
-
-// 만약 탐색하다가 다음 노드가 이미 방문한적 있다면, 그대로 끝
-//    어떻게? 시작점 != 종착지 인 경우
+// visited : 0 (미방문), 1 (진행중) , 2(방문완료))
+// 1. [1][1] 부터 시작 (2중 for문)
+// 2. 미방문시 dfs 실행
+//     2-1. 방문하면서 visited = 1 (진행중) 처리
+//     2-2. 만약 다음 노드 상태가 visited = 1 (진행중) 이라면, 싸이클 발생
+//     2-3. dfs 빠져 나오면서 visited = 2 (방문완료) 처리
 
 
 import java.io.*;
@@ -42,7 +41,6 @@ public class Main{
                 }
             }
         }
-        // System.out.println(sb);
         System.out.print(ans);
     }
 
@@ -56,7 +54,6 @@ public class Main{
                 visited[h][w] = 2;
             }else if(visited[nextH][nextW]==1){
                 ans++;
-                sb.append("카운트 발생! visited["+nextH+"]["+nextW+"] \n");
                 return;
             }else if(visited[nextH][nextW]==2){
                 return;
@@ -71,7 +68,6 @@ public class Main{
                 dfs(nextH, nextW);
                 visited[h][w] = 2;
             }else if(visited[nextH][nextW]==1){
-                sb.append("카운트 발생! visited["+nextH+"]["+nextW+"] \n");
                 ans++;
                 return;
             }else if(visited[nextH][nextW]==2){
@@ -88,7 +84,6 @@ public class Main{
                 visited[h][w] = 2;
             }else if(visited[nextH][nextW]==1){
                 ans++;
-                sb.append("카운트 발생! visited["+nextH+"]["+nextW+"] \n");
                 return;
             }else if(visited[nextH][nextW]==2){
                 return;
@@ -104,7 +99,6 @@ public class Main{
                 visited[h][w] = 2;
             }else if(visited[nextH][nextW]==1){
                 ans++;
-                sb.append("카운트 발생! visited["+nextH+"]["+nextW+"] \n");
                 return;
             }else if(visited[nextH][nextW]==2){
                 return;
