@@ -13,8 +13,8 @@ import java.util.*;
 public class Main{
 
     static StringBuilder sb = new StringBuilder();
-    static int[] parent = new int[1000001]; // 부모
-    static int[] dp = new int[1000001];
+    static int[] parent = new int[100001]; // 부모
+    static int[] dp = new int[100001];
     
     public static void main(String[] args) throws IOException{
         // 데이터 입력
