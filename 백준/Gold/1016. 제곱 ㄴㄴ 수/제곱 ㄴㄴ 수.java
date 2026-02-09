@@ -24,13 +24,13 @@ public class Main{
         boolean[] arr = new boolean[arrSize];
 
         // 2) 2 ~ Math.sqrt(MAX) 제곱 수 필터링
-        for(long i=2; i<=(long) Math.sqrt(MAX); i++){
+        for(long i=2; i<=Math.sqrt(MAX); i++){
             
-            long sq = i * i; // i의 제곱
+            long sq = i * i * 1L; // i의 제곱
 
             // (MIN / sq) * sq 는 MIN 이하의 sq의 가장 큰 배수
             // 3) -> 활용 ((MIN + sq - 1 ) / sq ) * sq 는 MIN 이상인 sq의 가장 작은 배수 찾기
-            long start =  ( (MIN + sq - 1) / sq )  * sq;
+            long start = ( (MIN + sq - 1) / sq ) * sq;
 
             // 4) sq를 계속 더해가면서 나누어 떨어지는거 true 로 값 바꾸기
             for( long x = start; x<= MAX; x=x+sq ){
