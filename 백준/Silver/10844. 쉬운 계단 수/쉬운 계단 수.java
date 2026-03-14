@@ -35,14 +35,12 @@ public class Main{
             }
         }
 
-        // 결과: dp[N][0] ~ dp[N][9] 까지 더해주기
+        // 결과: dp[N][1] ~ dp[N][9] 까지 더해주기
         long sum = 0L;
         for(int i=1; i<10; i++){
             sum = (sum + dp[N][i]) % DIV;
         }
 
         System.out.print(sum);
-        
-        
     }
 }
