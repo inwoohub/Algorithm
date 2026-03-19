@@ -9,15 +9,12 @@ class Solution {
         
         // 정답 배열
         int[] answer = new int[numbers.length];
-        
         // 스택 생성
         Stack<int[]> stack = new Stack<>();
-        
         for(int i=0; i<numbers.length; i++){
-            
             // 1. 현재 인덱스 값
             int cur = numbers[i];
-            // 2. 스택이 비어있는 경우
+            // 2. 스택이 비어있지 않은 경우
             if(!stack.isEmpty()) {
                 // 현재 수가 더 큰 경우
                 if(cur > stack.peek()[1]){
@@ -31,10 +28,8 @@ class Solution {
                         answer[stack.pop()[0]] = cur;
                     }   
                 }
-                
-                // 스택 넣어주고 종료
-                
             }
+            // 스택에 넣어주기
             stack.push(new int[]{i,cur});
         }
         // 남은 스택 처리 후 종료
