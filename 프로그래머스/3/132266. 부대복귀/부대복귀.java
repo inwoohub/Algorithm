@@ -6,6 +6,7 @@ import java.util.*;
 
 class Solution {
     
+    static final int MAX = Integer.MAX_VALUE;
     static ArrayList<Integer>[] graph;
     static int[] visited;
     
@@ -28,8 +29,8 @@ class Solution {
         int[] answer = new int[sources.length];
         for(int i=0; i<sources.length; i++){
             visited = new int[n+1]; // 거리 초기화
-            Arrays.fill(visited, -1);
-            int cur = sources[i]; // cur: 부대원
+            Arrays.fill(visited, MAX);
+            int cur = sources[i]; // cur 부대원
             int result = search(cur, destination); // 탐색
             answer[i] = result;
         }
@@ -40,30 +41,40 @@ class Solution {
     // 부대원 길 찾기 시작 , 있다면 최단경로 없다면 -1 로 return
     static int search(int i, int destination){
         
-        // 시작점인경우
-        if(i == destination){
-            return 0;
-        }
+        // 방문 가능한 큐 만들기
+        Queue<Node> q = new LinkedList<>();
+        q.offer(new Node(i, 0));
         
-        // 방문 가능한 큐 만들기 int[0] : node, int[1] : cost
-        PriorityQueue<int[]> pq = new PriorityQueue<>( (a,b) -> Integer.compare(a[1], b[1]) );
-        pq.offer(new int[]{destination, 0});
-        visited[destination] = 0;
-        
-        while(!pq.isEmpty()){
-            int[] cur = pq.poll();
-            int curNode = cur[0];
-            int curCost = cur[1];
-            for(int nextNode : graph[curNode]){
-                if( visited[nextNode] == -1 ){
-                    visited[nextNode] = curCost+1;
-                    pq.offer(new int[]{nextNode, curCost+1});
-                    if(nextNode == i){
-                        return visited[i];
+        // 큐가 비어있을 때까지 반복
+        while(!q.isEmpty()){
+            Node cur = q.poll();
+            // 첫번째가 아니고, 이전 cost 가 더 높다면 버리기
+            if(visited[cur.node] <= cur.cost) continue;
+            visited[cur.node] = cur.cost; // 거리 값 업데이트    
+            
+            for(int next : graph[cur.node]){
+                if(visited[next] > cur.cost+1){
+                    q.offer(new Node(next, cur.cost+1)); // 다음 방문 노드, cost + 1
+                    if(next == destination){ // 발견 시 바로 return
+                        return cur.cost+1;
                     }
                 }
-            }
+            }   
         }
-        return visited[i];
+        
+        if(visited[destination] != MAX ){
+            return visited[destination];
+        }
+        return -1;
     }
+    
+    static class Node{
+        int node;
+        int cost;
+        Node(int node, int cost){
+            this.node = node;
+            this.cost = cost;
+        }
+    }
+    
 }
