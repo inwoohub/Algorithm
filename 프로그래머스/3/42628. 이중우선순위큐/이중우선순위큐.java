@@ -8,7 +8,10 @@
 2. TreeMap 사용하기 
     -> 이진 트리로 이미 정렬까지 다 구현되어있는 레드블랙트리임
     -> 이걸로 날먹 가능함. 우선순위큐 사용해보고 학습 해보자.
+    -> 가장 앞에 있는게 가장 작은거 즉, 오름 차순으로 되어있고, value 를 기준으로 정렬한다.
 */
+
+1. 우선순위 큐 사용
 
 import java.util.*;
 
@@ -106,6 +109,69 @@ class Solution {
             return B;
         }
         return 0;
+    }
+    
+    
+}
+
+-----
+
+2. TreeMap 사용
+
+import java.util.*;
+
+class Solution {
+    
+    
+    public int[] solution(String[] operations) {
+        
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+        
+        // 순회하면서 operations 접근
+        for(String next : operations){
+            String[] arr = next.split(" ");
+            
+            char A = arr[0].charAt(0);        // 문자 뽑기
+            int B = Integer.parseInt(arr[1]); // 숫자 뽑기
+            
+            // 추가
+            if(A == 'I'){
+                treeMap.put(B, B); // 키를 기준으로 TreeMap 이 정렬하는지 확인해보기 -> value 를 기준으로 가져감
+            }
+            
+            
+            // 삭제
+            else {
+                
+                // 트리가 비어있으면 넘어가기
+                if(treeMap.size()<1){
+                    continue;
+                }
+                
+                // 최댓값 삭제
+                if(B == 1){
+                    treeMap.remove(treeMap.lastKey());
+                }
+                
+                // 최솟값 삭제
+                else {
+                    treeMap.remove(treeMap.firstKey());
+                }
+            }
+        }
+        
+        int MAX = 0;
+        int MIN = 0;
+        
+        // 최댓값, 최솟값 뽑기
+        if(treeMap.size()>0){
+            MAX = treeMap.get(treeMap.lastKey());
+            MIN = treeMap.get(treeMap.firstKey());   
+        }
+        
+        int[] answer = {MAX, MIN};
+        return answer;
+        
     }
     
     
