@@ -33,11 +33,11 @@ class Solution {
         
         indexMax = tickets.length + 1;
         ICN = -1; // 인천 배열 index 초기 위치
-        visited = new boolean[tickets.length]; // 방문 처리용 배열 생성
+        visited = new boolean[tickets.length+1]; // 방문 처리용 배열 생성
         
         // 1. list 배열 생성 후 초기화 (맵 연결 용도)
-        list = new ArrayList[tickets.length*2+1];
-        for(int i=0; i<tickets.length*2+1; i++){
+        list = new ArrayList[tickets.length + 1];
+        for(int i=0; i<tickets.length+1; i++){
             list[i] = new ArrayList<>();
         }
         
@@ -47,57 +47,38 @@ class Solution {
                 
         // 2. 여행지 리스트로
         for(int i=0; i<tickets.length; i++){
-//             String[] ticket = tickets[i];
-            
-//             // 해당 ticket이 없다면 count, 있다면 해당 매핑된 count 가져오기
-//             int getT = map.getOrDefault(ticket[0], count);
-            
-//             // 처음 여행지 발견
-//             if(getT == count){
-//                 map.put(ticket[0], count);
-//                 list[count].add(new Trip(ticket[1], idx)); // 단방향 연결
-//                 idx++;
-//                 if(ticket[0].equals("ICN")){
-//                     ICN = count; // 인천 Index 저장
-//                 }
-//                 count++;
-//             } else {
-//                 // 기존 여행지 경우
-//                 list[getT].add(new Trip(ticket[1], idx)); // 단방향 연결
-//                 idx++;
-//             }
-            
-//             // 도착지도 map에 등록 (없을 때만)
-//             if(!map.containsKey(ticket[1])){
-//                 map.put(ticket[1], count);
-//                 count++;
-//             }
-            
-            // 클선생
             String[] ticket = tickets[i];
             
-            // 출발지 처리
-            if (map.containsKey(ticket[0])) {
-                int getT = map.get(ticket[0]);
-                list[getT].add(new Trip(ticket[1], idx));
-                idx++;
-            } else {
+            // 해당 ticket이 없다면 count, 있다면 해당 매핑된 count 가져오기
+            int getT = map.getOrDefault(ticket[0], count);
+            
+            // if(getT != count && ticket[0].equals("ICN")){
+            //     ICN = getT;
+            // }
+            
+            // 처음 여행지 발견
+            if(getT == count){
                 map.put(ticket[0], count);
-                list[count].add(new Trip(ticket[1], idx));
+                list[count].add(new Trip(ticket[1], idx)); // 단방향 연결
                 idx++;
-                if (ticket[0].equals("ICN")) {
+                if(ticket[0].equals("ICN")){
+                    ICN = count; // 인천 Index 저장
+                }
+                count++;
+            } else {
+                // 기존 여행지 경우
+                list[getT].add(new Trip(ticket[1], idx)); // 단방향 연결
+                idx++;
+            }
+            
+            // 도착지도 map에 등록 (없을 때만)
+            if(!map.containsKey(ticket[1])){
+                map.put(ticket[1], count);
+                if(ticket[1].equals("ICN")){
                     ICN = count;
                 }
                 count++;
             }
-            
-            if (!map.containsKey(ticket[1])) {
-                map.put(ticket[1], count);
-                if (ticket[1].equals("ICN")) {
-                    ICN = count;
-                }
-                count++;
-            } //클선생
             
         }
         
