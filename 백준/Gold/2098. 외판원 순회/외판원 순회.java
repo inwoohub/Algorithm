@@ -47,7 +47,7 @@ public class Main{
         }
 
         // 3. 모든 노드가 출발지가 가능하기 때문에 for문 사용
-        for(int i=0; i<N; i++){
+        for(int i=0; i<1; i++){
             
             // dp 배열 초기 세팅 (최소를 찾기 위해 최대로 설정)
             for(int j=0; j<N; j++){
