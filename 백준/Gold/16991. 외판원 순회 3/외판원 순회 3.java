@@ -28,7 +28,7 @@ class Main{
         double[][] dp = new double[N][1<<N];// dp  배열 [N]: 현재 위치 , [1<<N]: 지나온 경로 비트로 마스킹
 
         for(int i=0; i<N; i++){
-            Arrays.fill(dist[i], -1); // 초기값 -1 로 세팅 : 거리기 때문에 도달 하지 못한 다는 의미
+            Arrays.fill(dist[i], -1); // 초기값 -1 로 세팅 : 거리기 때문에 도달 하지 못한 다는 의미로
         }
 
         // idx : 노드 번호
@@ -54,39 +54,39 @@ class Main{
                 int ny = next[1]; // 다음 y좌표
                 
                 // 거리 계산 및 거리 배열에 넣어주기
-                double distance = Math.sqrt( (cx-nx)*(cx-nx) + (cy-ny)*(cy-ny)  );
+                double distance = Math.sqrt( (cx-nx)*(cx-nx) + (cy-ny)*(cy-ny)  ); 
                 dist[i][j] = distance; // i -> j 로 가는데 거리 값
             }
         }
 
         // dp 배열 세팅 및 초기값 지정하기
         for(int i=0; i<N; i++){
-            Arrays.fill(dp[i], Double.MAX_VALUE); // dp 배열 최대값으로 채워넣기 (최소값을 구하기 위함)
+            Arrays.fill(dp[i], Integer.MAX_VALUE); // dp 배열 최대값으로 채워넣기 (최소값을 구하기 위함)
         }
         dp[0][1<<0] = 0; // dp 초기값 세팅 (시작은 0점으로 지정, 1<<0 비트 연산으로 통해 0번 노드 방문 처리)
 
         // 출발했던 도시로 돌아오는 것이기 때문에 순환 값 중 가장 작은 것을 고르면 됨
         for(int mask=0; mask<(1<<N); mask++){
-            
+
             for(int cur=0; cur<N; cur++){
                 if( (mask&(1<<cur)) ==0 ) continue; // 현재 cur 위치에서 cur 이 방문처리가 안되어있음 (즉, cur 방문 안하면 패스)
-                if( dp[cur][mask] == Double.MAX_VALUE ) continue; // 최소값이 없는 상태 즉, 도달하지 못하는 곳
+                if( dp[cur][mask] == Integer.MAX_VALUE ) continue; // 최소값이 없는 상태 즉, 도달하지 못하는 곳
 
                 for(int next=0; next<N; next++){
-                    if( ( mask&(1<<next) ) != 0 ) continue;  // 다음 방문 경로가 이미 방문처리가 되어있는 경우 (재방문 x)
+                    if( ( mask&(1<<N) ) != 0 ) continue;  // 다음 방문 경로가 이미 방문처리가 되어있는 경우 (재방문 x)
                     if( dist[cur][next] == -1 ) continue; // 경로가 없다면 패스
                     dp[next][mask|(1<<next)] = Math.min( dp[next][mask|(1<<next)], dp[cur][mask] + dist[cur][next] ); // dp 갱신
                 }
             }
         }
 
-        double answer = Double.MAX_VALUE;
+        double answer = Integer.MAX_VALUE;
 
         for(int end=0; end<N; end++){
             if( end == 0) continue; // 0으로 시작했기 때문에 0은 제외
-            if( dp[end][ (1<<N) -1 ] == Double.MAX_VALUE ) continue; // 오버플로우 방지
+            if( dp[end][ (1<<N) -1 ] == Integer.MAX_VALUE ) continue; // 오버플로우 방지
             if( dist[end][0] == -1 ) continue; // 돌아오는 길 없음
-            answer = Math.min( answer , dp[end][ (1<<N) -1 ] +dist[end][0] ); // 최소값 갱신
+            answer = Math.min( answer , dp[end][ (1<<N) -1 ] +dist[end][0] );
         }
         System.out.print(answer);
     }
