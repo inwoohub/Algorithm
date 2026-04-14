@@ -1,63 +1,48 @@
-/**
-알고리즘 :
-    비트 마스킹
-
-문제 요약 :
-    N이 주어질 때
-    1. 길이가 N 이면서
-    2. 0부터 9까지 숫자가 모두 등장하는 계단 수가 총 몇개?
-    * 0 으로 시작하는 수는 계단수가 아님
-
-전략 :
-    dp[i][j][mask] 배열 정의
-    [i]    : i 자리 숫자
-    [j]    : 끝나는 숫자
-    [mask] : 사용한 숫자
-    로 비트 마스킹
-*/
-
 import java.util.*;
 import java.io.*;
 
 public class Main{
 
-    static final long MOD = 1000000000;
-    
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final long MOD = 1000000000;
         int N = Integer.parseInt(br.readLine());
+
+        /**
+        [N+1]  : 자리수 x, xx, xxx, xxxx
+        [10]   : 마지막에 올 수 있는 수 0~9 가능
+        [1<<10]: 사용한 수 비트로 표기 0~9 총 10 개 가능
+        */
         long[][][] dp = new long[N+1][10][1<<10];
 
-        // dp 값 초기화
-        for(int i=1; i<10; i++){
-            dp[1][i][1<<i] = 1 ;
+        // dp 초기 값 표기
+        for(int i=1; i<10; i++){ // 1자리수 0 부터는 불가능.
+            dp[1][i][1<<i] = 1; // 1자리 수, 끝에 올수 있는 수는 0~9, [1<<i] 로 사용처리
         }
 
-        for(int mask=0; mask<(1<<10); mask++){
-            for(int i=2; i<=N; i++){
-                for(int j=0; j<10; j++){
-                    int bit = (mask|(1<<j)); // 사용한 숫자 포함해서 비트 마스킹하기
-                    
-                    if(j==0){
-                        dp[i][j][bit] = ( dp[i][j][bit] + dp[i-1][1][mask] ) % MOD ; // 끝나는 숫자가 0이라면, 이전 값은 1이여야함.
+        for(int mask=0; mask<(1<<10); mask++){ // 사용 안하기 ~ 전부 사용하기 mask 전부 접근
+            for(int i=2; i<=N; i++){           // 1자리 수는 초기값 주었음으로 2자리 수 부터 시ㅏㅈㄱ
+                for(int j=0; j<10; j++){       // 끝에 오는 수
+                    int nextMask = (mask | (1<<j)); // 현재 마스크 + 끝에 오는 수해서 모두 사용 처리
+                    if(j==0){      // 마지막에 0 이 왔다면, 계단수 이므로 이전에는 1밖에 올 수 없음 따라서 이전 마지막 수는 1
+                        dp[i][j][nextMask] = (dp[i][j][nextMask] + dp[i-1][1][mask]) % MOD;    
                     }
                         
-                    else if(j==9){
-                        dp[i][j][bit] = ( dp[i][j][bit] + dp[i-1][8][mask] ) % MOD ; // 끝나는 숫자가 9라면, 이전 값은 8이어야함.
+                    else if(j==9){ // 마지막에 9 이 왔다면, 계단수 이므로 이전에는 8밖에 올 수 없음 따라서 이전 마지막 수는 8
+                        dp[i][j][nextMask] = (dp[i][j][nextMask] + dp[i-1][8][mask]) % MOD;
                     }
-                        
-                    else{
-                        dp[i][j][bit] = ( dp[i][j][bit] + dp[i-1][j+1][mask] + dp[i-1][j-1][mask] ) % MOD ;
+
+                    else{ // 그 외는 이전 +1 , -1 둘 다 가능함
+                        dp[i][j][nextMask] = (dp[i][j][nextMask] + dp[i-1][j-1][mask] + dp[i-1][j+1][mask]) % MOD;
                     }
                 }
             }
         }
 
         long answer = 0;
-        for(int i=0; i<10; i++){
-            answer = ( answer + dp[N][i][ (1 << 10) - 1 ] ) % MOD;
+        for(int j=0; j<10; j++){
+            answer = (answer + dp[N][j][(1<<10)-1]) % MOD;
         }
         System.out.print(answer);
     }
-    
 }
