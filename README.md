@@ -1,37 +1,40 @@
-# Algorithm (코딩테스트)
+# Algorithm Study (Java)
 
-- 언어: Java
-- 백준 중심으로 문제 풀이를 정리합니다.  
->GitHub 자동화  | [백준허브(BackjoonHub)](https://chromewebstore.google.com/detail/%EB%B0%B1%EC%A4%80%ED%97%88%EB%B8%8Cbaekjoonhub/ccammcjdkpgjmcpijpahlehmapgmphmk?utm_source=item-share-cb)
-
+> **"꾸준함은 모든 것을 이긴다."** > 실전 감각 유지와 효율적인 코드 작성을 목표로 합니다.
 
 ---
 
-## ✅ 목표
-- 알고리즘 풀이 능력 향상 ❗️
-- (백준) 플래티넘 달성 하기 ❗️
+## 🛠 Tech Stack
+- **Language:** Java (OpenJDK 17 or 21)
+- **IDE:** IntelliJ IDEA / Eclipse
+- **Platforms:** - [Baekjoon Online Judge](https://www.acmicpc.net/)
+  - [Programmers](https://programmers.co.kr/)
+- **Automation:** [BaekjoonHub](https://chromewebstore.google.com/detail/%EB%B0%B1%EC%A4%80%ED%97%88%EB%B8%8Cbaekjoonhub/ccammcjdkpgjmcpijpahlehmapgmphmk?utm_source=item-share-cb) (GitHub Sync)
 
 ---
 
-## 📁 폴더 구조
-알고리즘 레벨 기준으로 정리합니다.
-
-- `백준/`
-- `백준/Bronze`
-- `백준/Silver`
-- `백준/Gold`
-- `백준/Platinum`
-- `...`
-
+## Goals (목표)
+- [x] **Baekjoon Glod 달성** (2025.09 완료) 
+- [x] **Baekjoon Platinum 달성** (2026.02 완료)
+- [ ] **1일 1문제 풀이:** 매일 한 문제 이상 풀며 코딩 감각 유지하기
+- [ ] **최적화 사고:** 단순히 정답을 맞히는 것을 넘어 시간/공간 복잡도를 최소화하는 방법 고민하기
+- [ ] **코드 리뷰 및 가독성:** 실전 코딩테스트를 대비하여 클린 코드 작성 및 예외 케이스(Edge Case) 철저히 분석하기
+- [ ] **다양한 접근:** 한 가지 알고리즘에 국한되지 않고 여러 가지 풀이 방식 비교하기
 
 ---
 
-## 🧾 파일 네이밍 규칙
-형식 예시:
+## 📁 Repository Structure
+플랫폼과 난이도별로 폴더를 구분하여 관리합니다.
 
-- `14003. 가장 긴 증가하는 부분 수열 5`
-- `12865. 평범한 배낭`
-- `14502 연구소`
-
-
----
+```text
+.
+├── 백준 (Baekjoon)
+│   ├── Bronze
+│   ├── Silver
+│   ├── Gold
+│   └── Platinum
+└── 프로그래머스 (Programmers)
+    ├── Lv.0
+    ├── Lv.1
+    ├── Lv.2
+    └── Lv.3
