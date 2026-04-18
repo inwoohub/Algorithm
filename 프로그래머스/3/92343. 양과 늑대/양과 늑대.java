@@ -1,92 +1,88 @@
 /**
 알고리즘 :
-    dfs + 비트 마스킹
+    이전 4중 for문 -> dfs -> bfs (3번째 try) , 비트마스킹
     
 문제 요약 :
     그려진 맵을 탐험하면서 최대 양 수 출력
     * 양 <= 늑대 인 경우 줍지 못함
-
+    
 전략 :
-    1. edges 꺼내서 맵 만들기
-    2. dfs 로 탐색 시작하기
-        - 지나온 경로 꺼내보면서 양 찾기
-            - 양 <= 늑대라면 return
-            - 양 > 늑대 라면 최대값 갱신해보기
-        - 지나온 노드에서 갈 수 있는 길 전부 탐색 
-            - 갈 수 있다면 비트로 포함 후 이동 (dfs)
-            - 갈 수 없다면 pass
+    1. ArrayList<Integer>[] list 만들기 : 노드 <-> 노드 연결 정보 담기
+    2. Queue<Integer> 큐 만들기 : Integer -> 비트 마스킹 (어디어디 방문했는지 표기 용도)
+    3. 큐에 담긴 방문 정보 확인하기
+        - 양 수 세어보기
+        - 늑대 수 세어보기
+        - 양 vs 늑대 수 비교
+            - 양이 더 많다면 양 최대 수 갱신 try
+                - 다음 갈 수 있는 경로 방문 후 큐에 넣어주기
+            - 늑대가 더 많거나, 같다면 해당 객체 소멸
+    4. 최대 answer 반환
 */
 
 import java.util.*;
 
 class Solution {
     
-    static ArrayList<Integer>[] list; // 노드간 연결 상태
-    static int answer;
-    
     public int solution(int[] info, int[][] edges) {
+        int answer = 0; // 정답 반환 초기값
+        boolean[] visited = new boolean[1<<info.length]; // 노드 중복 방지 방문 배열
         
-        answer = 0; // 최대 양 수
-    
-        // 1. edges 꺼내서 맵 만들기
-        list = new ArrayList[info.length];
+        // 1. ArrayList<Integer>[] list 만들기
+        ArrayList<Integer>[] list = new ArrayList[info.length];
         for(int i=0; i<info.length; i++){
-            list[i] = new ArrayList<>(); // 리스트 초기화
-        }
+            list[i] = new ArrayList<>();
+        } // list 생성 및 초기화
         
         for(int i=0; i<edges.length; i++){
             int A = edges[i][0];
             int B = edges[i][1];
             list[A].add(B);
-            list[B].add(A); // 양방향 매핑하기
+            list[B].add(A); // 양방향 매핑
+        } 
+        
+        // 2. Queue<Integer> 큐 만들기
+        ArrayDeque<Integer> q = new ArrayDeque<>();
+        q.offer((1<<0)); // 0번 노드 방문을 기점으로 시작
+        
+        while(!q.isEmpty()){ // bfs
+            int curMask = q.poll(); // 현재 방문 마스크
+            if(visited[curMask]){
+               continue; 
+            }
+            visited[curMask] = true; // q 꺼내는 시점에서 방문처리
+            
+            // 양, 늑대 수 세어보기
+            int sheep = 0;
+            int wolf = 0;
+            for(int i=0; i<info.length; i++){
+                // 방문 했던 경로라면,
+                if( (curMask&(1<<i)) != 0 ){
+                    // 양 or 늑대
+                    if(info[i] == 0){
+                        sheep++;
+                    } else { 
+                        wolf++;
+                    }
+                }
+            }
+            
+            if(sheep <= wolf) continue; // 양 <= 늑대 : 패스
+            answer = Math.max(answer, sheep); // 최대값 갱신
+            
+            // 연결되어 있는 노드에서 또 나아갈 수 있는 길 있다면 큐에 넣어주기
+            for(int curNode=0; curNode<info.length; curNode++){
+                // curNode : 현재 방문한 경로
+                if( (curMask & (1<<curNode)) != 0 ){ // 방문 담겨있는 노드라면,
+                    for(int nextNode : list[curNode] ){
+                        if( (curMask & (1<<nextNode)) == 0 ){ // 다음 노드 방문 안한 경우 추가
+                            int nextMask = (curMask | (1<<nextNode));
+                            q.offer(nextMask); // 큐에 추가                            
+                        }
+                    }
+                }
+            } 
         }
-        
-        // 그럴일 없겠지만 0번 노드가 늑대인 경우
-        if(info[0] == 1) return 0;
-        
-        // 2. dfs 탐색로 탐색 : info 배열 넘기기 , 0번 노드 사용 처리 (시작은 0번 고정)
-        dfs(info, (1<<0));
-
+        // 4. 정답 반환
         return answer;
-    }
-    
-    /**
-        dfs
-        int[] info : 양 or 늑대가 담겨있는 배열
-        mask : 현재 지나온 경로
-    */
-    static void dfs(int[] info, int mask){
-        
-        // 현재 방문 경로에서 양 수 세어보기
-        int countA = 0; // 양 수
-        int countB = 0; // 늑대 수
-        
-        // 양, 늑대 수 검사
-        for(int i=0; i<info.length; i++){
-            if( (mask & (1<<i) ) != 0 ){ // 방문 했다면
-                if(info[i] == 0){
-                    countA++; // 양 수 증가
-                } else {
-                    countB++; // 늑대 수 증가
-                }
-            }
-        }
-        
-        // 종료 조건. 양 <= 늑대 라면 못감
-        if( countA <= countB) return; 
-        answer = Math.max(answer, countA); // 최대 값 갱신
-        
-        // 지나온 경로에서
-        for(int i=0; i<info.length; i++){
-            if( (mask & (1<<i)) == 0 ) continue; // 지나온 땅이 아니라면, 넘기기
-            // 갈 수 있는 경로
-            for(int nextNode : list[i]){
-                // 안 가본 땅이 있다면
-                if( (mask & (1<<nextNode)) == 0 ){
-                    int nextMask = (mask | (1<<nextNode)); // 다음 땅 밟음
-                    dfs(info, nextMask); // dfs 이동
-                }
-            }
-        }
     }
 }
